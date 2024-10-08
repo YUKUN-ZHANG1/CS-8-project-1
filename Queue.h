@@ -107,6 +107,18 @@ class Queue{
         return temp;
     }
 
+    template <typename U>
+    T* search(U object)const{
+        node<T>* temp = front;
+        while (temp) {
+            if (*(temp->object()) == object) {
+                return temp->object();
+            }
+            temp = temp->link();
+        }
+        return nullptr;
+    }
+
     //需要一个删除：删除指定原元素
     bool deleteNode(T* object) {
         if (!front) {

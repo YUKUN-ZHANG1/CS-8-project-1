@@ -50,6 +50,12 @@ class Student{
     friend bool operator<=(const Student& A, const Student& B){return A.id<=B.id;}
     friend bool operator>=(const Student& A, const Student& B){return A.id>=B.id;}
     friend bool operator!=(const Student& A, const Student& B){return A.id!=B.id;}
+    friend bool operator< (const Student& A, const int& B){return A.id<B;}
+    friend bool operator> (const Student& A, const int& B){return A.id>B;}
+    friend bool operator==(const Student& A, const int& B){return A.id==B;}
+    friend bool operator<=(const Student& A, const int& B){return A.id<=B;}
+    friend bool operator>=(const Student& A, const int& B){return A.id>=B;}
+    friend bool operator!=(const Student& A, const int& B){return A.id!=B;}
 
     friend ostream& operator<<(ostream& out, const Student& student){
         out<<setw(5)<<student.id<<"  "<<student.name;

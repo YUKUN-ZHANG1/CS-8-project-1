@@ -103,7 +103,6 @@ void Course::drop(Student* student){
     if(!student){
         return;
     }
-
     if (student->popWaitlisted(this)&&waitlist.deleteNode(student)) {
         return;
     }
@@ -116,7 +115,7 @@ void Course::drop(Student* student){
 void Course::attend(){
     if(!waitlist.empty()){
         node<Student>* temp= waitlist.popNode();
-        if(!temp){
+        if(temp){
             Student* tempStudent = temp->object();
             enrollList.insertNode(temp);
             tempStudent->useAddCode(this);

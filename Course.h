@@ -49,6 +49,12 @@ class Course{
     friend bool operator<=(const Course& A, const Course& B){return A.code<=B.code;}
     friend bool operator>=(const Course& A, const Course& B){return A.code>=B.code;}
     friend bool operator!=(const Course& A, const Course& B){return A.code!=B.code;}
+    friend bool operator< (const Course& A, const string& B){return A.code<B;}
+    friend bool operator> (const Course& A, const string& B){return A.code>B;}
+    friend bool operator==(const Course& A, const string& B){return A.code==B;}
+    friend bool operator<=(const Course& A, const string& B){return A.code<=B;}
+    friend bool operator>=(const Course& A, const string& B){return A.code>=B;}
+    friend bool operator!=(const Course& A, const string& B){return A.code!=B;}
 
     friend ostream& operator<<(ostream& out, const Course& course){
         out<<std::left<<setw(10)<<course.code<<course.title<<std::right;

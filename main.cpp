@@ -7,7 +7,7 @@
 #include <string>
 using namespace std;
 
-bool creative_course_list(string course_file_name, CustomLinkedList<Course>& course_list){
+bool creative_course_list(string course_file_name, LinkedList<Course>& course_list){
     ifstream infile(course_file_name);
     if(!infile.is_open()){
         cerr<<"Error: Unable to open file: "<<course_file_name<<endl;
@@ -16,7 +16,7 @@ bool creative_course_list(string course_file_name, CustomLinkedList<Course>& cou
     string courseCode, courseName;
     int dummy1, dummy2;
     while(infile>>courseCode>>courseName>>dummy1>>dummy2){
-        Course tempCourse(courseCode, courseName);
+        Course* tempCourse = new Course(courseCode, courseName);
         course_list.insert(tempCourse);
     }
 
@@ -25,7 +25,7 @@ bool creative_course_list(string course_file_name, CustomLinkedList<Course>& cou
 }
 
 
-bool creative_student_list(string student_file_name, CustomLinkedList<Course>& course_list, CustomLinkedList<Student>& student_list) {
+bool creative_student_list(string student_file_name, LinkedList<Course>& course_list, LinkedList<Student>& student_list) {
     ifstream infile(student_file_name);
     if(!infile.is_open()){
         cerr<<"Error: Unable to open file: "<<student_file_name<<endl;
@@ -39,17 +39,15 @@ bool creative_student_list(string student_file_name, CustomLinkedList<Course>& c
         istringstream iss(line);
         iss >> studentId >> studentName >> enrolledCount;
 
-        Student* studentTemp, * studentTemp2 = new Student(studentId, studentName);
-        studentTemp = student_list.insert(*studentTemp2);
-        delete studentTemp2;
+        Student* studentTemp = new Student(studentId, studentName);
+        student_list.insert(studentTemp);
 
         for(int i = 0; i < enrolledCount; ++i){
             if(!(iss >> courseCode)){
                 cerr<<"Error: Missing enrolled course code for student "<<studentName<<endl;
                 continue;
             }
-            Course tempCourse(courseCode, "");
-            Course* coursePtr = course_list.search(tempCourse);
+            Course* coursePtr = course_list.search(courseCode);
             if(coursePtr != nullptr){
                 coursePtr->addEnroll(studentTemp);
             }
@@ -61,9 +59,7 @@ bool creative_student_list(string student_file_name, CustomLinkedList<Course>& c
                     cerr<<"Error: Missing waitlist course code for student "<<studentName<<endl;
                     continue;
                 }
-
-                Course tempCourse(courseCode, "");
-                Course* coursePtr = course_list.search(tempCourse);
+                Course* coursePtr = course_list.search(courseCode);
                 if(coursePtr != nullptr){
                     coursePtr->addWaitlist(studentTemp);
                 }
@@ -88,13 +84,12 @@ int printMenu(){
     return input;
 }
 
-Student* findStudent(CustomLinkedList<Student>& student_list){
+Student* findStudent(LinkedList<Student>& student_list){
     int id;
     string name;
     cout<<endl<<"Enter your id: ";
     cin>>id;
-    Student tempStudent(id, "");
-    Student* studentPtr = student_list.search(tempStudent);
+    Student* studentPtr = student_list.search(id);
     if(studentPtr != nullptr){
         cout<<"Enter your name: ";
         cin>>name;
@@ -105,12 +100,11 @@ Student* findStudent(CustomLinkedList<Student>& student_list){
     cout<<"Error: Student not found!"<<endl;
     return nullptr;
 }
-Course* findCourse(CustomLinkedList<Course>& course_list){
+Course* findCourse(LinkedList<Course>& course_list){
     string code, title;
     cout<<endl<<"Enter course code: ";
     cin>>code;
-    Course tempCourse(code, "");
-    Course* coursePtr = course_list.search(tempCourse);
+    Course* coursePtr = course_list.search(code);
     if(coursePtr != nullptr){
         cout<<"Enter course title: ";
         cin>>title;
@@ -122,14 +116,14 @@ Course* findCourse(CustomLinkedList<Course>& course_list){
     return nullptr;
 }
 
-void menu1(CustomLinkedList<Student>& student_list){
+void menu1(LinkedList<Student>& student_list){
     Student* studentPtr = findStudent(student_list);
     if(studentPtr){
         studentPtr->print();
     } 
 }
 
-void menu2(CustomLinkedList<Student>& student_list, CustomLinkedList<Course>& course_list){
+void menu2(LinkedList<Student>& student_list, LinkedList<Course>& course_list){
     Student* studentPtr = findStudent(student_list);
     if(studentPtr){
         Course* coursePtr = findCourse(course_list);
@@ -139,7 +133,7 @@ void menu2(CustomLinkedList<Student>& student_list, CustomLinkedList<Course>& co
     }
 }
 
-void menu3(CustomLinkedList<Student>& student_list, CustomLinkedList<Course>& course_list){
+void menu3(LinkedList<Student>& student_list, LinkedList<Course>& course_list){
     Student* studentPtr = findStudent(student_list);
     if(studentPtr){
         Course* coursePtr = findCourse(course_list);
@@ -149,8 +143,8 @@ void menu3(CustomLinkedList<Student>& student_list, CustomLinkedList<Course>& co
     }
 }
 
-void menu4(CustomLinkedList<Course>& course_list){
-    course_list.print();
+void menu4(LinkedList<Course>& course_list){
+    course_list.print_type_printFunc();
     cout<<endl;
 }
 
@@ -161,8 +155,8 @@ int main(){
     cout<<"Enter the student file name: ";
     cin>>student_file_name;
 
-    CustomLinkedList<Course> course_list;
-    CustomLinkedList<Student> student_list;
+    LinkedList<Course> course_list(false);
+    LinkedList<Student> student_list(false);
 
     if(!creative_course_list(course_file_name, course_list)) return 0;
     if(!creative_student_list(student_file_name, course_list, student_list)) return 0;

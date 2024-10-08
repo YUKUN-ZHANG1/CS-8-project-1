@@ -47,6 +47,19 @@ class node{
     friend bool operator>=(const node<T>& A, const T& B){return *A.object_>=B;}
     friend bool operator!=(const node<T>& A, const T& B){return *A.object_!=B;}
 
+    template <typename U>
+    friend bool operator< (const node<T>& A, const U& B){return *A.object_<B;}
+    template <typename U>
+    friend bool operator> (const node<T>& A, const U& B){return *A.object_>B;}
+    template <typename U>
+    friend bool operator==(const node<T>& A, const U& B){return *A.object_==B;}
+    template <typename U>
+    friend bool operator<=(const node<T>& A, const U& B){return *A.object_<=B;}
+    template <typename U>
+    friend bool operator>=(const node<T>& A, const U& B){return *A.object_>=B;}
+    template <typename U>
+    friend bool operator!=(const node<T>& A, const U& B){return *A.object_!=B;}
+
     friend ostream& operator<<(ostream& out, const node& A){
         out<< *(A.object());
         return out;

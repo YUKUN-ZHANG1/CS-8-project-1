@@ -49,12 +49,11 @@ class LinkedList{
                 if(*(ptr->link()->object())>*object){
                     temp->set_link(ptr->link());
                     ptr->set_link(temp);
-                    break;
+                    size++;
+                    return;
                 }
             }
-            if(!temp->link()){
-                ptr ->set_link(temp);
-            }
+            ptr ->set_link(temp);
         }
         size++;
     }
@@ -73,12 +72,11 @@ class LinkedList{
                 if(*(ptr->link())>*temp){
                     temp->set_link(ptr->link());
                     ptr->set_link(temp);
-                    break;
+                    size++;
+                    return;
                 }
             }
-            if(!temp->link()){
-                ptr ->set_link(temp);
-            }
+            ptr ->set_link(temp);
         }
         size++;
     }
@@ -93,6 +91,18 @@ class LinkedList{
                 temp = temp->link();
             }
         } 
+        return nullptr;
+    }
+
+    template <typename U>
+    T* search(U object)const{
+        node<T>* temp = head;
+        while (temp) {
+            if (*(temp->object()) == object) {
+                return temp->object();
+            }
+            temp = temp->link();
+        }
         return nullptr;
     }
 
